@@ -79,8 +79,8 @@ def generate_markdown_snapshot(project_root, output_filename):
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("Usage: python pack_context.py <path_to_library_root> <output_filename.md>")
-        print("Example: python pack_context.py ../SharedComponents 800-lib-shared-components.md")
+        print("Usage: python pack-context.py <path_to_library_root> <output_filename.md>")
+        print("Example: python pack-context.py ../SharedComponents 800-lib-shared-components.md")
         sys.exit(1)
 
     project_root = sys.argv[1]
