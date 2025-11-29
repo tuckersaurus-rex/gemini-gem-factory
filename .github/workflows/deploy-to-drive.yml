@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GDRIVE_FOLDER: ${{ secrets.GDRIVE_FOLDER }} # Google Drive folder path from secrets
+      GDRIVE_FOLDER: ${{ secrets.GEMINI_GEM_FOLDER }} # Google Drive folder path from secrets
 
     steps:
       # 1. Checkout Code
@@ -130,20 +130,20 @@ jobs:
       - name: Load Configuration - Manifest
         run: |
           # 4a Read the System Kernel from Manifest
-          SYSTEM_KERNEL=$(yq '.system_kernel' gem-manifest.yaml)
+          SYSTEM_KERNEL=$(yq -r '.system_kernel' gem-manifest.yaml)
           echo "SYSTEM_KERNEL=$SYSTEM_KERNEL" >> $GITHUB_ENV
 
           # 4b Read the Brains Folder from Manifest
-          BRAINS_FOLDER=$(yq '.brains_folder' gem-manifest.yaml)
-          echo "BRAINS_FOLDER=$BRAINS_FOLDER%/" >> $GITHUB_ENV
+          BRAINS_FOLDER=$(yq -r '.brains_folder' gem-manifest.yaml)
+          echo "BRAINS_FOLDER=$BRAINS_FOLDER" >> $GITHUB_ENV
 
           # 4c Read the Context Folder from Manifest
-          CONTEXT_FOLDER=$(yq '.context_folder' gem-manifest.yaml)
-          echo "CONTEXT_FOLDER=$CONTEXT_FOLDER%/" >> $GITHUB_ENV
+          CONTEXT_FOLDER=$(yq -r '.context_folder' gem-manifest.yaml)
+          echo "CONTEXT_FOLDER=$CONTEXT_FOLDER" >> $GITHUB_ENV
 
           # 4d Read the Artifact Folder from Manifest
-          ARTIFACT_FOLDER=$(yq '.artifact_folder' gem-manifest.yaml)
-          echo "ARTIFACT_FOLDER=$ARTIFACT_FOLDER%/" >> $GITHUB_ENV
+          ARTIFACT_FOLDER=$(yq -r '.artifact_folder' gem-manifest.yaml)
+          echo "ARTIFACT_FOLDER=$ARTIFACT_FOLDER" >> $GITHUB_ENV
 
       # 5 Load Configuration (2/2)
       - name: Load Configuration - Rclone
@@ -159,6 +159,17 @@ jobs:
         with:
           name: gem-releases
           path: ${{ env.ARTIFACT_FOLDER }}
+
+      # 7 Varification (1/1)
+      - name: Varification - Configuration
+        run: |
+          # Debug Step: Print where we think we are deploying (without revealing the full secret)
+          if [ -z "$GDRIVE_FOLDER" ]; then
+            echo "::error::GDRIVE_FOLDER is empty! Check your GitHub Secrets!"
+            exit 1
+          else
+            echo "Verification successful. Proceeding..."
+          fi
 
       # 7 Deploy to Drive (1/4)
       - name: Upload to Google Drive - system-kernel
