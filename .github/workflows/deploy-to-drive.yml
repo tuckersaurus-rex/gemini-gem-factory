@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # 1 Checkout Code
-
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -38,7 +37,7 @@ jobs:
       # 4 Build (1/1)
       - name: Build - Gem Artifacts
         run: |
-          # 1. Read Global Configs
+          # 1 Read Global Configs
           MANIFEST="gem-manifest.yaml"
 
           # Read and strip trailing slashes
@@ -50,52 +49,94 @@ jobs:
 
           # Use the Env Var we set in the previous step
           OUT_DIR="${{ env.ARTIFACT_FOLDER }}"
-
-          # Ensure output directory exists
           mkdir -p "$OUT_DIR"
 
-          # 2. Get Count of Gems
+          # Global Job Failure Flag (0 = success, 1 = fail)
+          JOB_HAS_ERRORS=0
+
+          # 2 Get Count of Gems
           count=$(yq '.gems | length' $MANIFEST)
           echo "Found $count Gems in Manifest."
 
-          # 3. Loop through Gems
+          # 3 Loop through Gems
           for ((i=0; i<count; i++)); do
 
             NAME=$(yq ".gems[$i].name" $MANIFEST)
             ID=$(yq ".gems[$i].id" $MANIFEST)
             VER=$(yq ".gems[$i].version" $MANIFEST)
 
+            echo "--------------------------------------------------"
             echo "Building Gem: $NAME (ID: $ID, Version: $VER)"
 
-            # Define Target Folder (e.g., releases/gem-id/)
-            TARGET="$OUT_DIR/$ID"
-            mkdir -p "$TARGET"
+            # 3a Validate Gem
+            GEM_VALID=1
 
-            # --- 3a. Zip Brains ---
-            ZIP_NAME="$ID-v$VER.zip"
-
-            # Build the file list
-            files_to_zip=""
-            for file in $(yq ".gems[$i].brains[]" $MANIFEST); do
-              files_to_zip="$files_to_zip $BRAINS_DIR/$file"
-            done
-
-            # Zip (-j flattens the path so files sit at the root of the zip)
-            zip -j "$TARGET/$ZIP_NAME" $files_to_zip
-
-            # --- 3b. Copy Context ---
-            # Loop through context files (|| true prevents crash on empty list)
-            for file in $(yq ".gems[$i].context[]" $MANIFEST 2>/dev/null); do
-              if [ ! -z "$file" ]; then
-                # Copy file to target, suppressing errors if list was empty but yq returned a newline
-                cp "$CONTEXT_DIR/$file" "$TARGET/" || true
+            # Check Brain Files
+            files=""
+            for file in $(yq -r ".gems[$i].brains[]" $MANIFEST); do
+              FULL_PATH="$BRAINS_DIR/$file"
+              if [ -f "$FULL_PATH" ]; then
+                files=$"files $FULL_PATH"
+              else
+                echo "::error::[Gem: $NAME] Missing brain file: $FULL_PATH"
+                GEM_VALID=0
+                JOB_HAS_ERRORS=1
               fi
             done
 
+            # Check Context Files
+            for file in $(yq -r ".gems[$i].context[]" $MANIFEST 2>/dev/null); do
+              if [ ! -z "$file" ]; then
+                FULL_PATH="$CONTEXT_DIR/$file"
+                if [ ! -f "$FULL_PATH" ]; then
+                  echo "::echo::[Gem: $Name] Missing Context file: $FULL_PATH"
+                  GEM_VALID=0
+                  JOB_HAS_ERRORS=1
+                fi
+              fi
+            done
+
+            # 3b Build Artifacts
+            if [ "$GEM_VALID" -eq 1 ]; if
+
+              # All files found. Proceed to Build.
+              TARGET="$OUT_DIR/$ID"
+              mkdir -p "$TARGET"
+
+              # Zip brains
+              ZIP_NAME="$ID-v$VER.zip"
+              zip -j "$TARGET/$ZIP_NAME" $files
+
+              # Copy Context
+              for file in $(yq -r ".gems[$i].context[]" $MANIFEST 2>/dev/null); do
+                if [ ! -z "$file" ]; then
+                  cp "$CONTEXT_DIR/$file" "$TARGET/"
+                fi
+              done
+
+              echo "::notice::[Gem: $NAME] Successfully built."
+
+            else
+              # Files missing. Skip build.
+              echo "::warning::[Gem: $NAME] Skipped due to missing files."
+
+            fi
+
           done
+
+          echo "--------------------------------------------------"
+
+          # 4 Finalize
+          if [ "$JOB_HAS_ERRORS" -ne 0 ]; then
+            echo "::error::Build completed with erros. One or more Gems were skipped."
+            exit 1
+          else
+            echo "::notice::All Gems built successfully."
+          fi
 
       # 5 Upload (1/1)
       - name: Upload - Artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: gem-releases
@@ -107,6 +148,9 @@ jobs:
   deploy:
     needs: build # Wait for build job to finish
     runs-on: ubuntu-latest
+
+    # SAFETY: Only run if the build job succeeded completely
+    if: success()
 
     env:
       GDRIVE_FOLDER: ${{ secrets.GEMINI_GEM_FOLDER }} # Google Drive folder path from secrets
@@ -161,7 +205,7 @@ jobs:
           path: ${{ env.ARTIFACT_FOLDER }}
 
       # 7 Varification (1/1)
-      - name: Varification - Configuration
+      - name: Verification - Configuration
         run: |
           # Debug Step: Print where we think we are deploying (without revealing the full secret)
           if [ -z "$GDRIVE_FOLDER" ]; then
