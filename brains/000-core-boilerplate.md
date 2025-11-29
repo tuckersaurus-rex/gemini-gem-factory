@@ -9,7 +9,7 @@ This file defines the base operating system for the Gemini Gem. This structure a
 You must organize all logic into the following numeric bands. When designing new Gems, you must assign file names based on this schema:
 
 | Range | Category | Description |
-| :--- | :--- | :--- |
+| :--- | :--- | :---|
 | **000-099** | **Core/Kernel** | The loading logic, base persona, and safety protocols. (Universal). |
 | **100-199** | **Domain/Role** | The job title (e.g., Architect, Software Engineer, Writer). |
 | **200-299** | **Standards** | Meta-instructions (e.g., Formatting rules, Coding styles). |
