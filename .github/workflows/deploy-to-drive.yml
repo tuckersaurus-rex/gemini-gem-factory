@@ -1,40 +1,45 @@
-name: Deploy Simple Configuration Structure
+name: Deploy to Google Drive
 
 on:
   push:
     branches:
-      - main # Trigger after merge to main
+      - main # Trigger on pushes to main
 
 jobs:
-  deploy:
+  backup:
     runs-on: ubuntu-latest
     steps:
-      - name: 📦 Checkout code
+      # 1. Checkout your code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Upload system-kernel.md to the ROOT FOLDER
-      - name: ⬆️ Upload 1/3 - System Kernel File
-        uses: nextDriveIoE/google-drive-upload-action@v2
-        with:
-          credentials: ${{ secrets.GSA_CREDENTIALS }}
-          parent_folder_id: ${{ secrets.GEMINI_CONFIG_FOLDER_ID }}
-          target: system-kernel.md
-          overwrite: true
+      # 2. (Optional) Build your project here if needed
+      # - name: Build Project
+      #   run: npm install && npm run build
 
-      # 2. Upload /brains content to the /brains SUBFOLDER
-      - name: ⬆️ Upload 2/3 - Brains Content
-        uses: nextDriveIoE/google-drive-upload-action@v2
-        with:
-          credentials: ${{ secrets.GSA_CREDENTIALS }}
-          parent_folder_id: ${{ secrets.GEMINI_CONFIG_FOLDER_ID }}
-          target: brains/
-          overwrite: true
+      # 3. Install Rclone
+      - name: Install Rclone
+        run: sudo -v ; curl https://rclone.org/install.sh | sudo bash
 
-      # 3. Upload /context content to the /context SUBFOLDER
-      - name: ⬆️ Upload 3/3 - Context Content
-        uses: nextDriveIoE/google-drive-upload-action@v2
-        with:
-          credentials: ${{ secrets.GSA_CREDENTIALS }}
-          parent_folder_id: ${{ secrets.GEMINI_CONFIG_FOLDER_ID }}
-          target: context/
-          overwrite: true
+      # 4. Authenticate and Copy
+      - name: Sync to Google Drive
+        env:
+          # Load the secret into an env var
+          GDRIVE_SA_KEY: ${{ secrets.GSA_CREDENTIALS }}
+          GDRIVE_FOLDER: ${{ secrets.GEMINI_CONFIG_FOLDER_ID }}
+        run: |
+          # Create the auth file from the secret
+          echo "$GDRIVE_SA_KEY" > sa_key.json
+
+          # Configure rclone to use the service account
+          # "gdrive" is the name we are giving this connection
+          # "drive" is the type of storage (Google Drive)
+          rclone config create gdrive drive service_account_file ./sa_key.json --non-interactive
+
+          # Run the copy command
+          # Usage: rclone copy <local_path> <remote_name>:<remote_folder>
+          # Replace './files-to-copy' with your actual folder (e.g., ./dist or ./src)
+          rclone copy ./brains gdrive:"$GDRIVE_FOLDER"
+
+          # Cleanup the key file for security
+          rm sa_key.json
