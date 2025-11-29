@@ -26,7 +26,7 @@ This optimized workflow leverages the **GitHub App Integration** to provide live
 | **4. Deployment Trigger** | GitHub UI | Commit changes and merge to `main` using **Squash and Merge**. | Triggers CI/CD to push the updated Brains/Manifest to Google Drive. |
 | **5. Final Assembly** | Local Repo | **Zip the necessary Brain files** from the `/brains` folder (including `000`, `100`, `200`, and any `800` library files). | Creates the portable instruction package (`gem-brain-latest.zip`). |
 | **6. Gem Creation** | New Gem Config | **Create the new Project Gem** by uploading the **Brain Zip** (`gem-brain-latest.zip`). | Provides the static **Rules and Core Libraries** for the session. |
-| **7. Context Injection** | Gemini Chat | **Start a chat** with the new Gem, click **Add file** $\rightarrow$ **Import code** $\rightarrow$ **Enter the GitHub branch URL** of your project code. | Provides the dynamic **Data** (live codebase context) for the session. |
+| **7. Context Injection** | Gemini Chat | **Start a chat** with the new Gem, click **Add file** → **Import code** → **Enter the GitHub branch URL** of your project code. | Provides the dynamic **Data** (live codebase context) for the session. |
 
 ---
 
