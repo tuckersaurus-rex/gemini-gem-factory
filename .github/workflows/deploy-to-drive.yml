@@ -36,4 +36,4 @@ jobs:
         run: |
           # Copy the 'dist' folder to a '$GDRIVE_FOLDER' folder on your Drive
           # 'gdrive' matches the [header] in your config file
-          rclone copy ./brains gdrive:"$GDRIVE_FOLDER"
+          rclone copy ./brains gdrive:_GitHub_Deployment_Test
