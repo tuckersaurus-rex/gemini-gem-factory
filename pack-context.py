@@ -35,8 +35,12 @@ def generate_markdown_snapshot(project_root, output_filename):
     # Ensure output file is inside the project root directory
     abs_output_path = os.path.abspath(output_path)
     abs_project_root = os.path.abspath(project_root)
-    if os.path.commonpath([abs_output_path, abs_project_root]) != abs_project_root:
-        print("Error: Output file must be inside the project root directory. Aborting.")
+    try:
+        if os.path.commonpath([abs_output_path, abs_project_root]) != abs_project_root:
+            print("Error: Output file must be inside the project root directory. Aborting.")
+            sys.exit(1)
+    except ValueError:
+        print("Error: Output file and project root are on different drives. Aborting.")
         sys.exit(1)
     print(f"📦 Packing context from: {project_root}")
     print(f"➡️ Output file: {output_filename}")

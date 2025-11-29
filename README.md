@@ -10,7 +10,7 @@ This repository utilizes the **Two-Slot Architecture** to separate static instru
 | **`/context`** | **Slot 2: The Data Index.** Contains the library inventory (`999` manifest). | **Strict.** Contains the data indexes and metadata. |
 | **`/releases`** | Archived Zip files of built Brains. | N/A |
 | **`.github/`** | CI/CD Workflows. | N/A |
-| **Root** | Contains the `pack_context.py` script and documentation. | N/A |
+| **Root** | Contains the `pack-context.py` script and documentation. | N/A |
 
 ---
 
@@ -43,7 +43,7 @@ When requesting a new Gem configuration from the Architect, use this structured 
 > 3.  **Tech Stack & Skills (The "What"):** [List all required languages, frameworks, and tools. e.g., .NET 8, EF Core, Docker.]
 > 4.  **Constraints & Standards:** [List any specific rules. e.g., "Must use Kebab-Case," "Use clean architecture."]
 
-### 2. pack_context.py (Static Library Injection)
+### 2. pack-context.py (Static Library Injection)
 
 This script is used **only** for capturing the source code of **stable, internal libraries** (files in the 800-band).
 

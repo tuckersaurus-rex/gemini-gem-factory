@@ -56,13 +56,13 @@ jobs:
             echo "Created destination folder: $ARTIFACT_PATH"
 
             # --- B) Zip all items under -modules ---
-            FILES_TO_ZIP=""
+            FILES_TO_ZIP=()
             for file in $MODULE_ARRAY; do
-              FILES_TO_ZIP+=" brains/$file"
+              FILES_TO_ZIP+=("brains/$file")
             done
 
             # Execute the zip command and place the result in the artifact folder
-            zip -j "$ARTIFACT_PATH/$ZIP_FILENAME" $FILES_TO_ZIP || { echo "Error: Failed to create zip file"; exit 1; }
+            zip -j "$ARTIFACT_PATH/$ZIP_FILENAME" "${FILES_TO_ZIP[@]}" || { echo "Error: Failed to create zip file"; exit 1; }
             echo "✅ Created $ZIP_FILENAME"
 
             # --- C) Copy all files listed under -external_context ---
