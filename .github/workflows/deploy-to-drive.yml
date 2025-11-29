@@ -29,7 +29,7 @@ jobs:
       - name: Load Configuration - Manifest
         run: |
           # Read the folder name from YAML
-          FOLDER=$(yq '.artifact_folder' gem-manifest.yaml)
+          FOLDER=$(yq -r '.artifact_folder' gem-manifest.yaml)
           # Strip trailing slash just in case
           FOLDER="${FOLDER%/}"
           echo "ARTIFACT_FOLDER=$FOLDER" >> $GITHUB_ENV
@@ -41,10 +41,10 @@ jobs:
           MANIFEST="gem-manifest.yaml"
 
           # Read and strip trailing slashes
-          BRAINS_RAW=$(yq '.brains_folder' $MANIFEST)
+          BRAINS_RAW=$(yq -r '.brains_folder' $MANIFEST)
           BRAINS_DIR="${BRAINS_RAW%/}"
 
-          CONTEXT_RAW=$(yq '.context_folder' $MANIFEST)
+          CONTEXT_RAW=$(yq -r '.context_folder' $MANIFEST)
           CONTEXT_DIR="${CONTEXT_RAW%/}"
 
           # Use the Env Var we set in the previous step
@@ -55,15 +55,15 @@ jobs:
           JOB_HAS_ERRORS=0
 
           # 2 Get Count of Gems
-          count=$(yq '.gems | length' $MANIFEST)
+          count=$(yq -r '.gems | length' $MANIFEST)
           echo "Found $count Gems in Manifest."
 
           # 3 Loop through Gems
           for ((i=0; i<count; i++)); do
 
-            NAME=$(yq ".gems[$i].name" $MANIFEST)
-            ID=$(yq ".gems[$i].id" $MANIFEST)
-            VER=$(yq ".gems[$i].version" $MANIFEST)
+            NAME=$(yq -r ".gems[$i].name" $MANIFEST)
+            ID=$(yq -r ".gems[$i].id" $MANIFEST)
+            VER=$(yq -r ".gems[$i].version" $MANIFEST)
 
             echo "--------------------------------------------------"
             echo "Building Gem: $NAME (ID: $ID, Version: $VER)"
@@ -76,7 +76,7 @@ jobs:
             for file in $(yq -r ".gems[$i].brains[]" $MANIFEST); do
               FULL_PATH="$BRAINS_DIR/$file"
               if [ -f "$FULL_PATH" ]; then
-                files=$"files $FULL_PATH"
+                files="$files $FULL_PATH"
               else
                 echo "::error::[Gem: $NAME] Missing brain file: $FULL_PATH"
                 GEM_VALID=0
@@ -89,7 +89,7 @@ jobs:
               if [ ! -z "$file" ]; then
                 FULL_PATH="$CONTEXT_DIR/$file"
                 if [ ! -f "$FULL_PATH" ]; then
-                  echo "::echo::[Gem: $Name] Missing Context file: $FULL_PATH"
+                  echo "::error::[Gem: $NAME] Missing Context file: $FULL_PATH"
                   GEM_VALID=0
                   JOB_HAS_ERRORS=1
                 fi
@@ -128,7 +128,7 @@ jobs:
 
           # 4 Finalize
           if [ "$JOB_HAS_ERRORS" -ne 0 ]; then
-            echo "::error::Build completed with erros. One or more Gems were skipped."
+            echo "::error::Build completed with errors. One or more Gems were skipped."
             exit 1
           else
             echo "::notice::All Gems built successfully."
@@ -204,7 +204,7 @@ jobs:
           name: gem-releases
           path: ${{ env.ARTIFACT_FOLDER }}
 
-      # 7 Varification (1/1)
+      # 7 Verification (1/1)
       - name: Verification - Configuration
         run: |
           # Debug Step: Print where we think we are deploying (without revealing the full secret)
