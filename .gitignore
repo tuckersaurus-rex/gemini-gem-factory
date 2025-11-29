@@ -1,5 +1,5 @@
 # -----------------------------------------------------
-# 1. ENVIRONMENT / OS / IDE ARTIFACTS
+# 1 ENVIRONMENT / OS / IDE ARTIFACTS
 # -----------------------------------------------------
 .DS_Store
 desktop.ini
@@ -10,7 +10,12 @@ venv/
 __pycache__/
 
 # -----------------------------------------------------
-# 2. EXPLICITLY ALLOWED FILES (NEGATION)
+# 2 Release/Artifact folder
+# -----------------------------------------------------
+/releases/**/*
+
+# -----------------------------------------------------
+# 3 EXPLICITLY ALLOWED FILES (NEGATION)
 # -----------------------------------------------------
 # We MUST track the .gitkeep files to version control empty directories
 !.gitkeep
