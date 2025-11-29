@@ -62,7 +62,7 @@ jobs:
             done
 
             # Execute the zip command and place the result in the artifact folder
-            zip -j "$ARTIFACT_PATH/$ZIP_FILENAME" $FILES_TO_ZIP
+            zip -j "$ARTIFACT_PATH/$ZIP_FILENAME" $FILES_TO_ZIP || { echo "Error: Failed to create zip file"; exit 1; }
             echo "✅ Created $ZIP_FILENAME"
 
             # --- C) Copy all files listed under -external_context ---
