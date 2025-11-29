@@ -14,8 +14,8 @@ All files must strictly follow: `[3-Digit-Number]-[category]-[name].md`
 
 **Structure:**
 
-1.  **Prefix:** 3 digits followed immediately by a hyphen (e.g., `100-`).
-2.  **Body:** Lowercase description separated by hyphens.
+1. **Prefix:** 3 digits followed immediately by a hyphen (e.g., `100-`).
+2. **Body:** Lowercase description separated by hyphens.
 
 **Examples:**
 
