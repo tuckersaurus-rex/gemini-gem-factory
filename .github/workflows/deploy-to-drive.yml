@@ -97,7 +97,7 @@ jobs:
             done
 
             # 3b Build Artifacts
-            if [ "$GEM_VALID" -eq 1 ]; if
+            if [ "$GEM_VALID" -eq 1 ]; then
 
               # All files found. Proceed to Build.
               TARGET="$OUT_DIR/$ID"
