@@ -25,7 +25,7 @@ jobs:
       - name: 📄 Convert Manifest to JSON
         id: manifest
         run: |
-          yq '.[] | {"version": .version, "base_name": .filename, "file_list": .modules, "drive_folder": .drive_folder, "external_context": (.external_context // [])}' gem-manifest.yaml | jq -s . > /tmp/manifest.json
+          yq 'map(select(.filename != null)) | map({"version": .version, "base_name": .filename, "file_list": .modules, "drive_folder": .drive_folder, "external_context": (.external_context // [])})' gem-manifest.yaml > /tmp/manifest.json
 
       # 4. Loop through the generated JSON array, create custom zips, and assemble
       - name: 🗜️ Package Custom Brain Zips & Context
