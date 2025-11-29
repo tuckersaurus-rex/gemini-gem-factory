@@ -1,16 +1,111 @@
 name: Deploy to Google Drive
 
 on:
-  # 1. Allows you to click a button to test (Manual Trigger)
   workflow_dispatch:
-  # 2. Automatically runs when you push to main (Future proofing)
   push:
     branches:
       - main
-      - "feature/implement-google-drive-deployment"
+      - "workflow/ci-build-and-deploy" # Special branch name for testing CI/CD
+      - "feature/implement-google-drive-deployment" # TODO Remove before merging to main
 
 jobs:
+  # ======================================================
+  # JOB 1: BUILD (Parse Manifest & Create Zips)
+  # ======================================================
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 1 Checkout Code
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2 Setup Environment (1/1)
+      - name: Setup Environment - yq
+        run: |
+          sudo wget -qO /usr/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/bin/yq
+
+      # 3 Load Configuration (1/1)
+      - name: Load Configuration - Manifest
+        run: |
+          # Read the folder name from YAML
+          FOLDER=$(yq '.artifact_folder' gem-manifest.yaml)
+          # Strip trailing slash just in case
+          FOLDER="${FOLDER%/}"
+          echo "ARTIFACT_FOLDER=$FOLDER" >> $GITHUB_ENV
+
+      # 4 Build (1/1)
+      - name: Build - Gem Artifacts
+        run: |
+          # 1. Read Global Configs
+          MANIFEST="gem-manifest.yaml"
+
+          # Read and strip trailing slashes
+          BRAINS_RAW=$(yq '.brains_folder' $MANIFEST)
+          BRAINS_DIR="${BRAINS_RAW%/}"
+
+          CONTEXT_RAW=$(yq '.context_folder' $MANIFEST)
+          CONTEXT_DIR="${CONTEXT_RAW%/}"
+
+          # Use the Env Var we set in the previous step
+          OUT_DIR="${{ env.ARTIFACT_FOLDER }}"
+
+          # Ensure output directory exists
+          mkdir -p "$OUT_DIR"
+
+          # 2. Get Count of Gems
+          count=$(yq '.gems | length' $MANIFEST)
+          echo "Found $count Gems in Manifest."
+
+          # 3. Loop through Gems
+          for ((i=0; i<count; i++)); do
+
+            NAME=$(yq ".gems[$i].name" $MANIFEST)
+            ID=$(yq ".gems[$i].id" $MANIFEST)
+            VER=$(yq ".gems[$i].version" $MANIFEST)
+
+            echo "Building Gem: $NAME (ID: $ID, Version: $VER)"
+
+            # Define Target Folder (e.g., releases/gem-id/)
+            TARGET="$OUT_DIR/$ID"
+            mkdir -p "$TARGET"
+
+            # --- 3a. Zip Brains ---
+            ZIP_NAME="$ID-v$VER.zip"
+
+            # Build the file list
+            files_to_zip=""
+            for file in $(yq ".gems[$i].brains[]" $MANIFEST); do
+              files_to_zip="$files_to_zip $BRAINS_DIR/$file"
+            done
+
+            # Zip (-j flattens the path so files sit at the root of the zip)
+            zip -j "$TARGET/$ZIP_NAME" $files_to_zip
+
+            # --- 3b. Copy Context ---
+            # Loop through context files (|| true prevents crash on empty list)
+            for file in $(yq ".gems[$i].context[]" $MANIFEST 2>/dev/null); do
+              if [ ! -z "$file" ]; then
+                # Copy file to target, suppressing errors if list was empty but yq returned a newline
+                cp "$CONTEXT_DIR/$file" "$TARGET/" || true
+              fi
+            done
+
+          done
+
+      # 5 Upload (1/1)
+      - name: Upload - Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gem-releases
+          path: ${{ env.ARTIFACT_FOLDER }}
+
+  # ======================================================
+  # JOB 2: DEPLOY (Copy to Google Drive)
+  # ======================================================
   deploy:
+    needs: build # Wait for build job to finish
     runs-on: ubuntu-latest
 
     env:
@@ -21,52 +116,88 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Setup Environment (Example for .NET - un-comment if needed)
-      # -name: Setup .NET
-      #  uses: actions/setup-dotnet@v4
-      # with:
-      #   dotnet-version: 10.0.x
+      # 2 Setup Environment (1/2)
+      - name: Setup Environment - yq
+        run: |
+          sudo wget -qO /usr/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/bin/yq
 
-      # 3. Build Project (Example - un-comment if needed)
-      # - name: Build Project
-      #  run: |
-      #    echo "Run your build command here (e.g., npm run build or dotnet publish)"
-      #    # For now, we make the directory so the next step doesn't fail
-      #    mkdir -p dist
-
-      # 4. Install Rclone
-      - name: Install Rclone
+      # 3 Setup Environment (2/2)
+      - name: Setup Environment - Rclone
         run: sudo -v ; curl https://rclone.org/install.sh | sudo bash
 
-      # 5. Configure RClone (from Secrets)
-      - name: Setup Rclone Config
+      # 4 Load Configuration (1/2)
+      - name: Load Configuration - Manifest
+        run: |
+          # 4a Read the System Kernel from Manifest
+          SYSTEM_KERNEL=$(yq '.system_kernel' gem-manifest.yaml)
+          echo "SYSTEM_KERNEL=$SYSTEM_KERNEL" >> $GITHUB_ENV
+
+          # 4b Read the Brains Folder from Manifest
+          BRAINS_FOLDER=$(yq '.brains_folder' gem-manifest.yaml)
+          echo "BRAINS_FOLDER=$BRAINS_FOLDER%/" >> $GITHUB_ENV
+
+          # 4c Read the Context Folder from Manifest
+          CONTEXT_FOLDER=$(yq '.context_folder' gem-manifest.yaml)
+          echo "CONTEXT_FOLDER=$CONTEXT_FOLDER%/" >> $GITHUB_ENV
+
+          # 4d Read the Artifact Folder from Manifest
+          ARTIFACT_FOLDER=$(yq '.artifact_folder' gem-manifest.yaml)
+          echo "ARTIFACT_FOLDER=$ARTIFACT_FOLDER%/" >> $GITHUB_ENV
+
+      # 5 Load Configuration (2/2)
+      - name: Load Configuration - Rclone
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         run: |
-          # Create the config directory
           mkdir -p ~/.config/rclone
-          # Write the secret to the config file
           echo "$RCLONE_CONF" > ~/.config/rclone/rclone.conf
 
-      # 6a. Deploy to Drive 1/3
+      # 6 Download (1/1)
+      - name: Download - Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: gem-releases
+          path: ${{ env.ARTIFACT_FOLDER }}
+
+      # 7 Deploy to Drive (1/4)
       - name: Upload to Google Drive - system-kernel
         run: |
-          # Copy the 'system-kernel' to the specified Google Drive folder'
-          rclone copy ./system-kernel.md "gdrive:$GDRIVE_FOLDER"
+          echo "Deploying system-kernel.md to Google Drive..."
+          # NOTE: When copying a single file to a folder, point to the folder
+          rclone copy "${{ env.SYSTEM_KERNEL }}" "gdrive:$GDRIVE_FOLDER" --verbose
 
-      # 6b. Deploy to Drive 2/3
+      # 8. Deploy to Drive (2/4)
       - name: Upload to Google Drive - brains
         run: |
           # Copy the 'brains' directory to the specified Google Drive folder'
-          rclone copy ./brains "gdrive:$GDRIVE_FOLDER/brains"
+          echo "Deploying brains to Google Drive..."
+          rclone copy "./${{ env.BRAINS_FOLDER }}" "gdrive:$GDRIVE_FOLDER/${{ env.BRAINS_FOLDER }}" \
+            --exclude ".gitkeep" \
+            --transfers=10 \
+            --verbose
 
-      # 6c. Deploy to Drive 3/3
+      # 9 Deploy to Drive (3/4)
       - name: Upload to Google Drive - context
         run: |
           # Copy the 'context' directory to the specified Google Drive folder'
-          rclone copy ./context "gdrive:$GDRIVE_FOLDER/context"
+          echo "Deploying context to Google Drive..."
+          rclone copy "./${{ env.CONTEXT_FOLDER }}" "gdrive:$GDRIVE_FOLDER/${{ env.CONTEXT_FOLDER }}" \
+            --exclude ".gitkeep" \
+            --transfers=10 \
+            --verbose
 
-      # 7. Security Cleanup
+      # 10 Deploy to Drive (4/4)
+      - name: Upload to Google Drive - artifacts
+        run: |
+          # Copy the 'artifact' directory to the specified Google Drive folder'
+          echo "Deploying artifacts to Google Drive..."
+          rclone copy "./${{ env.ARTIFACT_FOLDER }}" "gdrive:$GDRIVE_FOLDER/${{ env.ARTIFACT_FOLDER }}" \
+            --exclude ".gitkeep" \
+            --transfers=10 \
+            --verbose
+
+      # 11 Cleanup (1/1)
       - name: Remove Rclone Config
         if: always() # Runs even if previous steps fail
         run: rm -rf ~/.config/rclone

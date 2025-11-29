@@ -1,0 +1,30 @@
+system_kernel: "./system-kernel.md"
+brains_folder: "brains/"
+context_folder: "context/"
+artifact_folder: "releases/"
+gems:
+  - name: "Gem Architect"
+    id: "gem-architect"
+    description: "Defines the structure and configuration for Gemini Gems."
+    version: "1.0.0"
+    brains:
+      - "000-core-protocol.md"
+      - "100-role-gem-architect.md"
+      - "200-tech-module-standards.md"
+    context:
+      - "999-architect-library-manifest.md"
+
+  - name: "Blazor .NET 10 Engineer"
+    id: "mud-blazor-dotnet10-engineer"
+    description: "A Gemini Gem for Blazor .NET 10 applications."
+    version: "1.3.0"
+    brains:
+      - "000-core-protocol.md"
+      - "101-role-software-engineer.md"
+      - "201-tech-dotnet10-standards.md"
+      - "300-tech-csharp-14.md"
+      - "301-tech-aspnet-10.md"
+      - "302-tech-blazor-server.md"
+      - "401-tech-mud-blazor.md"
+      - "800-lib-debugden-core.md"
+    context: []
