@@ -1,20 +1,18 @@
-# 40 - FRAMEWORK: ENTITY FRAMEWORK CORE 10
+# 50 - FWK: ENTITY FRAMEWORK CORE 10
 
-## 1. CONTEXT LIFECYCLE (BLAZOR SPECIFIC)
+## 1. CONTEXT LIFECYCLE
 
-* **Factory Pattern:** You MUST inject `IDbContextFactory<TContext>`, not `TContext` directly.
-  * *Reason:* Blazor Server circuits are long-lived. A standard Scoped `DbContext` is not thread-safe and will crash if the user triggers two async events simultaneously.
-* **Usage:** Create short-lived contexts for every operation.
-  * *Pattern:* `using var context = await _factory.CreateDbContextAsync();`
+* **Factory Pattern:** You MUST inject `IDbContextFactory<TContext>`, not `TContext` directly, to handle Blazor Server concurrency.
+* **Usage:** You must create short-lived contexts for every operation using the `using var context = await _factory.CreateDbContextAsync();` pattern.
 
-## 2. QUERY PERFORMANCE (READS)
+## 2. QUERY PERFORMANCE
 
-* **No Tracking:** By default, all read-only queries must use `.AsNoTracking()`.
-  * *Why:* Tracking entities adds significant memory overhead. Only track entities you intend to `Update()` in the same scope.
-* **Projections:** Never return raw Entities to the UI. Use `.Select(x => new Dto { ... })` to fetch only the columns needed.
-* **Split Queries:** For queries with large `.Include()` collections, use `.AsSplitQuery()` to prevent "Cartesian Explosion".
+* **No Tracking:** By default, you must apply `.AsNoTracking()` to all read-only queries.
+* **Projections:** You must never return raw Entities to the UI; use `.Select(x => new Dto { ... })`.
+* **Split Queries:** You must use `.AsSplitQuery()` for queries with large `.Include()` collections to prevent Cartesian Explosion.
 
-## 3. MUTATION STRATEGY (WRITES)
+## 3. TECHNICAL STANDARDS
 
-* **Batch Operations:** Prefer the .NET 10/EF Core `ExecuteUpdateAsync` and `ExecuteDeleteAsync` methods for bulk operations.
-* **Concurrency:** Handle `DbUpdateConcurrencyException`.
+*(Specific implementation details, syntax preferences, or formatting rules)*
+* **Mutation:** Prefer `ExecuteUpdateAsync` and `ExecuteDeleteAsync` for bulk operations.
+* **Concurrency:** Always handle `DbUpdateConcurrencyException` in write operations.

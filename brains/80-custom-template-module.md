@@ -36,7 +36,7 @@ This file serves as the **Source of Truth** for generating Competency Modules (S
 
 ## 3. TECHNICAL STANDARDS
 
-*(Specific implementation details, syntax preferences, or formatting rules)*
+*(Specific implementation details, syntax preferences, formatting rules, or advanced configuration strategies)*
 * **Syntax:** [e.g., "Use File-Scoped Namespaces."]
 * **Formatting:** [e.g., "All JSON must be minified."]
 ```
