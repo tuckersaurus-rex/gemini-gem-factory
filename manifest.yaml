@@ -29,7 +29,7 @@ artifacts:
       - "00-core-iterative.md"
       - "10-role-system-architect.md"
       - "30-skill-gem-engineering.md"
-      - "80-lib-module-catalog.md"
+      - "80-custom-module-catalog.md"
       - "90-project-gem-architect.md"
 
     # Static Context Files (PDFs, Images, etc.)
