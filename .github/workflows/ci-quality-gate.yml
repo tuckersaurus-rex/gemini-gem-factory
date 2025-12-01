@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - "main"
-      - "workflow/ci-pipeline" # Special branch name for testing CI/CD
+      - "workflow/*"
   pull_request:
     branches:
       - "main"

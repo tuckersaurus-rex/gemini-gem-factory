@@ -1,61 +1,133 @@
-# Gemini Gem Configuration Library
+# Gemini Gem Configuration ("The Gem Factory")
 
-## 📂 Repository Structure
+## 1. Overview
 
-This repository utilizes the **Two-Slot Architecture** to separate static instructions from dynamic project data.
+This repository serves as a **Continuous Integration (CI) Pipeline** for generating modular System Instructions ("Gem Artifacts") for Google Gemini.
 
-| Directory | Purpose | Protocol |
+Instead of maintaining giant, monolithic text files for every custom Gem, this system uses the **Decimal Patch Protocol** to treat knowledge as modular components ("LEGO bricks"). The build pipeline assembles these components into versioned, deployable ZIP archives based on a central configuration.
+
+### The Philosophy: Decimal Patch Protocol
+
+All knowledge modules in `brains/` strictly follow the Sector 00-90 hierarchy:
+
+| Sector | Domain | Description |
 | :--- | :--- | :--- |
-| **`/brains`** | **Slot 1: The OS/Kernel.** Contains core logic, roles, standards, and permanent library code. | **Strict.** Files must be `000` to `899` (Century Protocol). |
-| **`/context`** | **Slot 2: The Data Index.** Contains the library inventory (`999` manifest). | **Strict.** Contains the data indexes and metadata. |
-| **`/releases`** | Archived Zip files of built Brains. | N/A |
-| **`.github/`** | CI/CD Workflows. | N/A |
-| **Root** | Contains the `pack-context.py` script and documentation. | N/A |
+| **00-09** | **Kernel** | Core operating protocols (Security, Iteration). |
+| **10-19** | **Role** | Persona and tone definitions. |
+| **20-29** | **Env** | Runtime environment and technology stack. |
+| **30-39** | **Skill** | Specific languages or coding standards. |
+| **40-49** | **Fwk** | Frameworks and Data Access. |
+| **50-59** | **UI** | Interface strategies. |
+| **60-79** | **Lib** | 3rd Party Libraries. |
+| **80-89** | **Custom** | Proprietary Libraries & Catalogs. |
+| **90-99** | **Project** | Specific business rules and overrides. |
 
 ---
 
-## 🚀 Workflow: Creating a New Project Gem (Optimized)
+## 2. Repository Structure
 
-This optimized workflow leverages the **GitHub App Integration** to provide live code context (Data) while retaining the Gem's static instruction structure (Rules).
+```text
+.
+├── .github/workflows/
+│   └── build-and-deploy.yml   # The CI/CD Logic
+├── brains/                    # SOURCE: Markdown Knowledge Modules (The "Bricks")
+├── context/                   # SOURCE: Static Assets (PDFs, Images, etc.)
+├── system-instruction.md      # TEMPLATE: The Universal System Instruction Bootloader
+└── manifest.yaml              # CONFIG: The "Recipe Book" defining Gem compositions
+```
 
-| Step | Location | Action | Purpose |
-| :--- | :--- | :--- | :--- |
-| **1. Design & Plan** | Gemini Chat | Ask the **Gem Architect** to design the required instruction files using the template below. | Generates the file list and any new module content needed. |
-| **2. Repo Development** | Local Repo | Create a feature branch and add any new `.md` files the Architect generated (e.g., `350-tech-blazor.md`). | Adds new capabilities to the shared instruction library (`/brains`). |
-| **3. Catalog Update** | Local Repo | Add the newly created files to the `context/999-architect-library-manifest.md`. | Informs the Architect that this new module is now reusable. |
-| **4. Deployment Trigger** | GitHub UI | Commit changes and merge to `main` using **Squash and Merge**. | Triggers CI/CD to push the updated Brains/Manifest to Google Drive. |
-| **5. Final Assembly** | Local Repo | **Zip the necessary Brain files** from the `/brains` folder (including `000`, `100`, `200`, and any `800` library files). | Creates the portable instruction package (`gem-brain-latest.zip`). |
-| **6. Gem Creation** | New Gem Config | **Create the new Project Gem** by uploading the **Brain Zip** (`gem-brain-latest.zip`). | Provides the static **Rules and Core Libraries** for the session. |
-| **7. Context Injection** | Gemini Chat | **Start a chat** with the new Gem, click **Add file** → **Import code** → **Enter the GitHub branch URL** of your project code. | Provides the dynamic **Data** (live codebase context) for the session. |
+### Key Files
 
----
-
-## 🛠️ Tooling & Architecture
-
-### 1. Architect Prompt Template
-
-When requesting a new Gem configuration from the Architect, use this structured input:
-
-> I require a new Gem configuration for the following scenario:
->
-> 1.  **Role (The "Who"):** [e.g., Senior C# Backend Developer]
-> 2.  **Project Context (The "Goal"):** [Describe the specific business goal or application being built.]
-> 3.  **Tech Stack & Skills (The "What"):** [List all required languages, frameworks, and tools. e.g., .NET 8, EF Core, Docker.]
-> 4.  **Constraints & Standards:** [List any specific rules. e.g., "Must use Kebab-Case," "Use clean architecture."]
-
-### 2. pack-context.py (Static Library Injection)
-
-This script is used **only** for capturing the source code of **stable, internal libraries** (files in the 800-band).
-
-* **Purpose:** To transform stable library code into a single `800-lib-*.md` file that is then included in the Brain Zip as permanent knowledge.
-* **Usage:** `python pack-context.py <path_to_library_root> <output_filename.md>`
-* **Placement:** The resulting `800-lib-*.md` file must be placed in the `/brains` directory.
+* **`manifest.yaml`**: The Source of Truth. It defines which modules from `brains/` are combined to create a specific Gem.
+* **`system-instructions.md`**: The master bootloader file. This is the text you actually paste into the "System Instructions" box in Gemini. It instructs the AI to unzip and read the uploaded knowledge files.
 
 ---
 
-## 🏗️ Contribution Workflow
+## 3. The Build Pipeline (CI/CD)
 
-1.  **Strict Naming:** All files in `/brains` MUST follow `[000-899]-[category]-[name].md` (Kebab-Case).
-2.  **Deployment Trigger:** The `deploy-to-drive.yml` workflow runs ONLY after a Pull Request is merged into `main`.
-3.  **CI Enforcement:** The `quality-check.yml` GitHub Action will block any PR that violates the naming, formatting, or structure rules defined in the system.
-4.  **Merging:** Always select **Squash and Merge** to maintain a clean, linear history on the `main` branch.
+This repository uses **GitHub Actions** to automate the packaging and deployment process.
+
+**Trigger:** Push to `main` OR Manual Workflow Dispatch.
+
+### The Build Process
+
+1.  **Global Bootloader Generation:**
+    * The workflow copies `system-instructions.md` -> `system-instructions.md`.
+    * This single file serves as the entry point for *all* Gems generated by this repo.
+2.  **Artifact Assembly:**
+    * It iterates through every entry in `manifest.yaml`.
+    * It validates that all required modules exist in `brains/`.
+3.  **Metadata Injection:**
+    * **`info.txt`**: Created in the artifact folder. Contains the Name, Description, and Version for easy copy-pasting into AI Studio.
+    * **`README.md`**: Generated *inside* the ZIP file. This allows the AI to self-identify its version and purpose after ingestion.
+4.  **Deployment:**
+    * The entire output directory is synced to **Google Drive** using Rclone.
+
+---
+
+## 4. Usage Guide
+
+### A. How to Create a New Knowledge Module
+
+1.  Create a new file in `brains/`.
+2.  Name it using the strict convention: `[Sector]-[Abbr]-[Name].md`.
+    * *Example:* `60-lib-pandas.md` (Sector 60, Library, Pandas).
+3.  Write the content in Markdown.
+
+### B. How to Define a New Gem
+
+1.  Open `manifest.yaml`.
+2.  Add a new entry under `artifacts`:
+
+```yaml
+- name: "Python Data Analyst"
+  id: "python-analyst"
+  version: "1.0.0"
+  description: "Expert in Pandas and NumPy."
+  modules:
+    - "00-core-config.md"       # Always include Core
+    - "10-role-senior.md"       # Pick a Persona
+    - "60-lib-pandas.md"        # Add specific Skills
+  context: []
+```
+
+### C. How to Install a Gem (User Perspective)
+
+Once the build completes, navigate to the **Releases** folder in Google Drive.
+
+1.  **System Instructions:**
+    * Open `system-instructions.md` in the root of the releases folder.
+    * Copy the entire text.
+    * Paste it into the **System Instructions** field in Gemini/AI Studio.
+2.  **Knowledge Upload:**
+    * Navigate to the specific Gem folder (e.g., `gem-architect/`).
+    * Upload the latest ZIP file (e.g., `gem-architect-v2.1.0.zip`).
+3.  **Configuration:**
+    * Open `info.txt` in the Gem folder.
+    * Copy the **Name** and **Description** into the Gemini settings.
+
+---
+
+## 5. Output Directory Structure
+
+After a successful build, your Google Drive will look like this:
+
+```text
+/releases
+│
+├── system-instructions.md        <-- The UNIVERSAL Bootloader (Use for all Gems)
+│
+├── gem-architect/                <-- Gem Artifact Folder
+│   ├── info.txt                  <-- Metadata (Name/Desc) for Copy-Paste
+│   ├── gem-architect-v2.1.0.zip  <-- The Knowledge Cartridge (Upload this)
+│   └── gem-architect-v2.1.1.zip  <-- History is preserved
+│
+└── python-analyst/
+    ├── info.txt
+    └── python-analyst-v1.0.0.zip
+```
+
+## 6. Maintenance
+
+* **Versioning:** When updating a Gem, increment the `version` in `manifest.yaml`. This ensures a new ZIP is created, preserving the old version in the Drive folder for rollback if necessary.
+* **Pruning:** The CI pipeline *adds* new files; it does not delete old ones. Occasional manual cleanup of old ZIPs in Google Drive may be required if storage is a concern.
