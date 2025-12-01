@@ -1,0 +1,36 @@
+sys_kernel: "kernel.md"
+sys_knowledge: "brains/"
+sys_context: "context/"
+sys_dist: "releases/"
+
+# Template
+#  - name: "[Gem Artifact Name]"
+#    id: "[Name Used for Subfolder/Zip]"
+#    description: "[Gem Artifact Description]"
+#    version: "[0.0.0 - Patterned Version Number (used in zip name)]"
+#    modules:
+#      # Core System Instructions
+#      - "00-core.md"
+#      # - [OTHER MODULE]
+#      # Project Overrides / Rules
+#      - "90-project-[project-name]"
+#    context: []
+
+# ARTIFACT DEFINITIONS
+artifacts:
+  - name: "Gem Architect"
+    id: "gem-architect"
+    version: "2.1.0"
+    description: "Builds modular instruction sets using the Decimal Patch Protocol (Lowercase Kebab)."
+
+    # The Knowledge Modules (Sector 00-90)
+    modules:
+      - "00-core-config.md"
+      - "00-core-iterative.md"
+      - "10-role-system-architect.md"
+      - "30-skill-gem-engineering.md"
+      - "80-lib-module-catalog.md"
+      - "90-project-gem-architect.md"
+
+    # Static Context Files (PDFs, Images, etc.)
+    context: []

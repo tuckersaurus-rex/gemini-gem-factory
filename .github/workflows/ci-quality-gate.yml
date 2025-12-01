@@ -1,0 +1,107 @@
+name: CI Quality Gate
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main", "feature/*"]
+
+# ==================================================
+# GLOBAL CONFIGURATION
+# ==================================================
+env:
+  # The Source of Truth
+  MANIFEST_FILE: "manifest.yaml"
+
+jobs:
+  # ==================================================
+  # JOB 1: SYNTAX CHECK (Standard Markdown Linting)
+  # ==================================================
+  markdown-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Markdown Lint
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: "**/*.md"
+
+  # ==================================================
+  # JOB 2: PROTOCOL ENFORCER
+  # Validates Filename Conventions against the Manifest
+  # ==================================================
+  protocol-enforcer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Environment (yq)
+        run: |
+          sudo wget -qO /usr/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/bin/yq
+
+      - name: Load Configuration & Verify Structure
+        run: |
+          echo "Reading configuration from ${{ env.MANIFEST_FILE }}..."
+
+          # 1. Parse Manifest to find the Knowledge Directory
+          KNOW_DIR_RAW=$(yq -r '.sys_knowledge' ${{ env.MANIFEST_FILE }})
+
+          # Strip trailing slash
+          KNOW_DIR="${KNOW_DIR_RAW%/}"
+
+          echo "📂 Knowledge Base Target: '$KNOW_DIR'"
+
+          # 2. Define Decimal Patch v2.1 Regex
+          # Format: XX-abbr-name.md (lowercase kebab)
+
+          REGEX="^[0-9]{2}-"
+          REGEX+="(core|role|env|skill|fwk|ui|lib|custom|project)"
+          REGEX+="-[a-z0-9\.-]+\.md$"
+
+          echo "📏 Regex Pattern: $REGEX"
+
+          # 3. Execution
+          ERROR_COUNT=0
+
+          if [ -d "$KNOW_DIR" ]; then
+            cd "$KNOW_DIR"
+
+            # Check if directory is not empty
+            if [ -n "$(ls -A . 2>/dev/null)" ]; then
+              for file in *.md; do
+                # Ignore gitkeep or non-md files if logic requires, but mostly just md
+                if [[ "$file" == ".gitkeep" ]]; then continue; fi
+
+                if [[ ! "$file" =~ $REGEX ]]; then
+                  echo "❌ VIOLATION: '$file' invalid format."
+                  echo "   Expected: XX-abbr-name.md (e.g., 30-skill-csharp.md)"
+                  echo "   Allowed Abbrs: core, role, env, skill, fwk, ui, lib, custom, project"
+                  ERROR_COUNT=$((ERROR_COUNT+1))
+                else
+                  # Optional: Strict range check (00-99)
+                  file_number=$(echo "$file" | cut -d'-' -f1)
+                  if (( 10#$file_number < 0 || 10#$file_number > 99 )); then
+                    echo "❌ VIOLATION: '$file' sector ID ($file_number) is outside 00-99 range."
+                    ERROR_COUNT=$((ERROR_COUNT+1))
+                  else
+                    echo "✅ OK: $file"
+                  fi
+                fi
+              done
+            else
+               echo "⚠️ Warning: Knowledge directory '$KNOW_DIR' is empty."
+            fi
+          else
+            echo "::error::Knowledge directory '$KNOW_DIR' defined in manifest does not exist!"
+            exit 1
+          fi
+
+          # 4. Final Report
+          if [ $ERROR_COUNT -gt 0 ]; then
+            echo "::error::Found $ERROR_COUNT naming violations. Build failed."
+            exit 1
+          else
+            echo "🎉 Quality Gate Passed."
+          fi

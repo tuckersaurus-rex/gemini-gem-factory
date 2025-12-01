@@ -1,0 +1,36 @@
+.   represents the root directory.
+├─  indicates a direct child that is not the last in its level.
+└─  indicates a direct child that is the last in its level.
+│   maintains the vertical alignment for nested elements.
+
+. (root)
+├─ (folder 1)
+│  ├─ (folder 1)
+│  │  ├─ (file 1)
+│  │  └─ (file 2)
+│  ├─ (folder 2)
+│  │  └─ (file 1)
+│  └─ (file 1)
+└─ (folder 2)
+  └─ (file 1)
+
+Here is the structure of my Decimal Protocol Gem Artifact System.
+
+.
+├─ brains
+│  └─ [00-files.md]
+├─ context
+│  └─ [files.*]
+├─ kernel.md
+├─ manifest.yaml
+└─ README.md
+
+1) The brains folder contains all our Decimal Protocol brain files.
+2) The context folder contains all our non-Decimal Protocol context files.
+3) kernel.md is the template file used to populate a Gem Artifact's instruction text.
+4) manifest.yaml is the Gem Artifact definition file. my system is setup through GitHub GitActions and upon merging to main, it reads the manifest file and contructs each artifact folder with a zip of the brain files and a copy of all the context files. it then pushes the results into a 'releases' folder on my Google Drive for easy upload.
+5) README.md contains a description of the Decimal Protocol system and how to use the manifest file to create Gem Artifacts.
+
+I've uploaded my current manifest.yaml (only details my old Gem Artifact), deploy-to-drive.yml GitAction that builds the Gem Artifacts, and quality-check.yml GitAction that ensures it's safe to merge to main.
+
+I need you to read my manifest.yaml, deploy-to-drive.yml, and quality-check.yml then make changes to compensate for the changes made to our Decimal Protocol system.
