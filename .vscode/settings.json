@@ -1,4 +1,8 @@
 {
     // Fixes the markdownlint extension not finding the config file
-    "markdownlint.configFile": ".markdownlint.json"
+    "markdownlint.configFile": ".markdownlint.json",
+    "github-actions.workflows.pinned.workflows": [
+      ".github/workflows/ci-quality-gate.yml",
+      ".github/workflows/build-and-deploy.yml"
+    ]
 }
