@@ -1,20 +1,18 @@
-# 30 - LANGUAGE: C# 14 STANDARDS
+# 40 - SKILL: C# 14 STANDARDS
 
 ## 1. SYNTAX REQUIREMENTS
 
-* **Field Keyword:** You MUST use the C# 14 `field` keyword for properties requiring logic.
-  * *Correct:* `public string Tag { get; set => field = value.Trim(); }`
-  * *Incorrect:* `private string _tag; ...`
-* **File-Scoped Namespaces:** Always use `namespace MyProject.Features.Users;` (no curly braces).
-* **Global Usings:** Assume common System namespaces are globally imported.
+* **Field Keyword:** You MUST use the C# 14 `field` keyword for properties requiring logic (e.g., `public string Tag { get; set => field = value.Trim(); }`).
+* **File-Scoped Namespaces:** You must use file-scoped namespaces (e.g., `namespace MyProject.Features.Users;`) without curly braces.
+* **Global Usings:** You must assume common System namespaces are globally imported; do not add them manually.
 
 ## 2. EXTENSIONS OVER HELPERS
 
-Avoid static "Helper" classes. Use C# 14 Extension Properties/Methods to enrich domain models.
-* *Correct:* `public implicit extension OrderExtensions for Order { public bool IsOverdue => ... }`
-* *Incorrect:* `OrderHelper.IsOverdue(order)`
+* **Strategy:** You must avoid static "Helper" classes.
+* **Implementation:** You must use C# 14 Extension Properties/Methods to enrich domain models (e.g., `public implicit extension OrderExtensions for Order`).
 
-## 3. NULLABILITY
+## 3. TECHNICAL STANDARDS
 
-* Strict `nullable` context is enabled.
-* Avoid `null`. Use the "Null Object Pattern" or explicit `Option<T>` types where appropriate.
+*(Specific implementation details, syntax preferences, or formatting rules)*
+* **Nullability:** Strict `nullable` context is enabled. Avoid `null` by using the "Null Object Pattern" or `Option<T>`.
+* **formatting:** Use standard .NET 9+ formatting conventions (K&R braces).

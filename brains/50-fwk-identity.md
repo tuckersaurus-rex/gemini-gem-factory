@@ -1,20 +1,17 @@
-# 40 - FRAMEWORK: MICROSOFT IDENTITY
+# 50 - FWK: MICROSOFT IDENTITY
 
 ## 1. CONTEXT ARCHITECTURE
 
-* **Inheritance:** Your application's `DbContext` MUST inherit from `IdentityDbContext<ApplicationUser, ApplicationRole, string>`.
-* **User Model:** Create an `ApplicationUser` class inheriting from `IdentityUser`.
+* **Inheritance:** Your `DbContext` MUST inherit from `IdentityDbContext<ApplicationUser, ApplicationRole, string>`.
+* **User Model:** You must create an `ApplicationUser` class inheriting from `IdentityUser`.
 
-## 2. CONFIGURATION STRATEGY (Program.cs)
+## 2. CONFIGURATION STRATEGY
 
-* **Service Registration:** Use `builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()`.
-  * **Stores:** Chain `.AddEntityFrameworkStores<YourDbContext>()`.
-* **Password Policy:** Enforce strict defaults (RequireDigit, RequiredLength = 12).
-* **Lockout:** Enable lockout to prevent brute-force attacks.
+* **Service Registration:** You must use `builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()` chained with `.AddEntityFrameworkStores<YourDbContext>()`.
+* **Security:** You must enforce strict password defaults (RequireDigit, RequiredLength = 12) and enable lockout.
 
-## 3. ACCESS & MANAGER USAGE
+## 3. TECHNICAL STANDARDS
 
-* **Dependency Injection:**
-  * **DO NOT** query the `AspNetUsers` table directly via `DbContext`.
-  * **ALWAYS** use `UserManager<ApplicationUser>` for user management.
-  * **ALWAYS** use `SignInManager<ApplicationUser>` for session management.
+*(Specific implementation details, syntax preferences, or formatting rules)*
+* **Access:** DO NOT query `AspNetUsers` directly. ALWAYS use `UserManager<T>` or `SignInManager<T>`.
+* **Keys:** Use `string` (GUIDs) for Primary Keys on Identity tables.

@@ -1,15 +1,17 @@
-# 60 - LIB: TAILWIND CSS STRATEGY
+# 70 - LIB: TAILWIND CSS STRATEGY
 
 ## 1. UTILITY-FIRST PHILOSOPHY
 
-* **No Custom CSS:** Writing custom CSS classes in `.razor.css` or `app.css` is strictly discouraged.
-* **Primary Strategy:** Style components exclusively using Tailwind utility classes directly in the HTML.
+* **No Custom CSS:** Writing custom CSS classes in `.razor.css` is strictly discouraged.
+* **Primary Strategy:** You must style components exclusively using Tailwind utility classes directly in the HTML.
 
 ## 2. CONSISTENCY & CONFIGURATION
 
-* **Source of Truth:** All colors, spacing, and breakpoints must be defined in `tailwind.config.js`.
-* **Component Abstraction:** If a set of Tailwind classes is repeated 3+ times, extract it into a small Razor component rather than using `@apply`.
+* **Source of Truth:** You must define all colors, spacing, and breakpoints in `tailwind.config.js`.
+* **Component Abstraction:** If a set of classes is repeated 3+ times, you must extract it into a small Razor component.
 
-## 3. BLAZOR INTEGRATION
+## 3. TECHNICAL STANDARDS
 
-* **Class Merging:** When building reusable components, always allow additional classes to be passed in and merged with the default Tailwind classes.
+*(Specific implementation details, syntax preferences, or formatting rules)*
+* **Integration:** Always allow `Class` parameters to be passed into components and merged with default Tailwind classes.
+* **Ordering:** Group Tailwind classes logically (Layout -> Box Model -> Typography -> Visuals).
