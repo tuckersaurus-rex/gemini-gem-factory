@@ -33,7 +33,7 @@ artifacts:
     description: "A modular knowledge cartridge compiled via the Decimal Patch Protocol. It packages specific Skills, Roles, and Business Rules into a versioned unit, allowing Gemini to instantly adopt specialized architectural capabilities."
     # The Knowledge Modules (Sector 00-90)
     modules:
-        # --- SYSTEM ---
+      # --- SYSTEM ---
       - "00-kernel-os.md"
       - "10-core-iterative.md"
       - "10-core-security.md"
@@ -54,29 +54,29 @@ artifacts:
     # Static Context Files (PDFs, Images, etc.)
     context: []
 
-    # ========================================
-    # Blazor Library Engineer
-    # ========================================
-    - name: "Blazor Library Engineer"
-      id: "gem-blazor-lib-engineer"
-      version: "1.0.0"
-      description: "Your implementation partner. Uses the Senior Engineer persona (Code-First) equipped with the Blazor Library knowledge stack."
-      # The Knowledge Modules (Sector 00-90)
-      modules:
-        # --- SYSTEM ---
-        - "00-kernel-os.md"
-        - "10-core-iterative.md"
-        - "10-core-security.md"
-        # --- PERSONA ---
-        - "20-role-senor-engineer.md"
-        - "30-env-dotnet-library.md"
-        # --- COMPETENCY ---
-        - "40-skill-csharp-14.md"
-        - "40-skill-docs-xml-architecture.md"
-        - "40-skill-markdown-generation.md"
-        - "50-fwk-horizontal-structure.md"
-        - "60-ui-native.md"
-        # --- PROJECT ---
-        - "90-project-blazor-lib.md"
-      # Static Context Files (PDFs, Images, etc.)
-      context: []
+  # ========================================
+  # Blazor Library Engineer
+  # ========================================
+  - name: "Blazor Library Engineer"
+    id: "gem-blazor-lib-engineer"
+    version: "1.0.0"
+    description: "Your implementation partner. Uses the Senior Engineer persona (Code-First) equipped with the Blazor Library knowledge stack."
+    # The Knowledge Modules (Sector 00-90)
+    modules:
+      # --- SYSTEM ---
+      - "00-kernel-os.md"
+      - "10-core-iterative.md"
+      - "10-core-security.md"
+      # --- PERSONA ---
+      - "20-role-senor-engineer.md"
+      - "30-env-dotnet-library.md"
+      # --- COMPETENCY ---
+      - "40-skill-csharp-14.md"
+      - "40-skill-docs-xml-architecture.md"
+      - "40-skill-markdown-generation.md"
+      - "50-fwk-horizontal-structure.md"
+      - "60-ui-native.md"
+      # --- PROJECT ---
+      - "90-project-blazor-lib.md"
+    # Static Context Files (PDFs, Images, etc.)
+    context: []
