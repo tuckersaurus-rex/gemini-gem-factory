@@ -10,7 +10,7 @@ sys_dist: "releases/"
 #    version: "[0.0.0 - Patterned Version Number (used in zip name)]"
 #    modules:
 #      # Core System Instructions
-#      - "00-core-config.md"
+#      - "00-core-kernel.md"
 #      # - [OTHER MODULE]
 #      # Project Overrides / Rules
 #      - "90-project-[project-name]"
@@ -20,17 +20,20 @@ sys_dist: "releases/"
 artifacts:
   - name: "Gem Architect"
     id: "gem-architect"
-    version: "2.1.0"
+    version: "2.2.0"
     description: "A modular knowledge cartridge compiled via the Decimal Patch Protocol. It packages specific Skills, Roles, and Business Rules into a versioned unit, allowing Gemini to instantly adopt specialized architectural capabilities."
 
     # The Knowledge Modules (Sector 00-90)
     modules:
-      - "00-core-config.md"
+      - "00-core-kernel.md"
       - "00-core-iterative.md"
       - "10-role-system-architect.md"
       - "30-skill-gem-engineering.md"
       - "80-custom-module-catalog.md"
+      - "80-custom-template-core.md"
+      - "80-custom-template-module.md"
       - "80-custom-template-project.md"
+      - "80-custom-template-role.md"
       - "90-project-gem-architect.md"
 
     # Static Context Files (PDFs, Images, etc.)

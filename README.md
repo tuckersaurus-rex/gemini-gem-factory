@@ -85,7 +85,7 @@ This repository uses **GitHub Actions** to automate the packaging and deployment
   version: "1.0.0"
   description: "Expert in Pandas and NumPy."
   modules:
-    - "00-core-config.md"       # Always include Core
+    - "00-core-kernel.md"       # Always include Core
     - "10-role-senior.md"       # Pick a Persona
     - "60-lib-pandas.md"        # Add specific Skills
   context: []
