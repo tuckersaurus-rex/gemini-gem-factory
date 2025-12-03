@@ -59,7 +59,7 @@ artifacts:
   # ========================================
   - name: "Blazor Library Engineer"
     id: "gem-blazor-lib-engineer"
-    version: "1.0.0"
+    version: "1.1.0"
     description: "Your implementation partner. Uses the Senior Engineer persona (Code-First) equipped with the Blazor Library knowledge stack."
     # The Knowledge Modules (Sector 00-90)
     modules:
