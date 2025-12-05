@@ -55,10 +55,10 @@ artifacts:
     context: []
 
   # ========================================
-  # Blazor Library Engineer
+  # Blazor Core Library Engineer
   # ========================================
-  - name: "Blazor Library Engineer"
-    id: "gem-blazor-lib-engineer"
+  - name: "Blazor Core Library Engineer"
+    id: "gem-blazor-core-lib-engineer"
     version: "1.1.0"
     description: "Your implementation partner. Uses the Senior Engineer persona (Code-First) equipped with the Blazor Library knowledge stack."
     # The Knowledge Modules (Sector 00-90)
@@ -77,6 +77,35 @@ artifacts:
       - "50-fwk-horizontal-structure.md"
       - "60-ui-native.md"
       # --- PROJECT ---
-      - "90-project-blazor-lib.md"
+      - "90-project-blazor-core-lib.md"
+    # Static Context Files (PDFs, Images, etc.)
+    context: []
+
+  # ========================================
+  # Blazor UI Library Engineer
+  # ========================================
+  - name: "Blazor UI Library Engineer"
+    id: "gem-blazor-ui-lib-engineer"
+    description: "Specialized UI Engineer. Creates Blazor components that inherit from DebugDen.Net.Core logic but render using MudBlazor."
+    version: "1.0.0"
+    # The Knowledge Modules (Sector 00-90)
+    modules:
+      # --- SYSTEM ---
+      - "00-kernel-os.md"
+      - "00-core-iterative.md"
+      - "00-core-security.md"
+      # --- PERSONA ---
+      - "20-role-senior-engineer.md"
+      - "env-dotnet-library.md"
+      # --- COMPETENCY ---
+      - "40-skill-csharp-14.md"
+      - "40-skill-docs-xml-architecture.md"
+      - "40-skill-markdown-generation.md"
+      - "50-fwk-horizontal-structure.md"
+      - "60-ui-native.md"
+      - "70-lib-debug-den-core.md"
+      - "70-lib-mudblazor.md"
+      # --- PROJECT ---
+      - "90-project-blazor-ui-lib"
     # Static Context Files (PDFs, Images, etc.)
     context: []
