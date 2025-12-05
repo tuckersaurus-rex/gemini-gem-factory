@@ -29,7 +29,7 @@ artifacts:
   # ========================================
   - name: "Gem Architect"
     id: "gem-architect"
-    version: "3.1.0"
+    version: "3.1.1"
     description: "A modular knowledge cartridge compiled via the Decimal Patch Protocol. It packages specific Skills, Roles, and Business Rules into a versioned unit, allowing Gemini to instantly adopt specialized architectural capabilities."
     # The Knowledge Modules (Sector 00-90)
     modules:
