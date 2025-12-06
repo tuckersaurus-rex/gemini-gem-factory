@@ -28,6 +28,7 @@ This is the **Long-Term Memory** of the Architect. Before generating NEW files, 
 | **50** | `50-fwk-mysql.md` | Pomelo driver, UTC dates. |
 | **50** | `50-fwk-vertical-slice.md` | Feature-folder structure rules. |
 | **60** | `60-ui-native.md` | CSS Isolation, No 3rd Party Libs. |
+| **70** | `70-lib-debugden-net-blazor.md` | Custom blazor library. |
 | **70** | `70-lib-mudblazor.md` | MudBlazor priority overrides. |
 | **70** | `70-lib-tailwindcss.md` | Utility-first CSS overrides. |
 | **80** | `80-custom-module-catalog.md` | Known modules (This file). |
