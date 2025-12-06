@@ -103,7 +103,7 @@ artifacts:
       - "40-skill-markdown-generation.md"
       - "50-fwk-horizontal-structure.md"
       - "60-ui-native.md"
-      - "70-lib-debug-den-core.md"
+      - "70-lib-debugden-net-blazor.md"
       - "70-lib-mudblazor.md"
       # --- PROJECT ---
       - "90-project-blazor-ui-lib"

@@ -1,5 +1,3 @@
-=== MODULE: 90-project-ui-lib ===
-
 # 90 - PROJECT: DebugDen UI Library
 
 ## 1. PROJECT METADATA
@@ -7,13 +5,13 @@
 * **Name:** DebugDen UI Component Library
 * **Type:** Razor Class Library (RCL)
 * **Stack:** Blazor Server (.NET 10), MudBlazor, DebugDen.Net.Core
-* **Goal:** Create a reusable UI library where logic/state is handled by the Core, and rendering is handled by MudBlazor.
+* **Goal:** Create a reusable UI library where logic/state is handled by DebugDen.Net.Blazor, and rendering is handled by MudBlazor.
 
 ## 2. VIRTUAL PRIORITY PATCH
 
 | Module Name | Physical ID | **Virtual ID** | Reason |
 | :--- | :--- | :--- | :--- |
-| **70-lib-debug-den-core** | 70 | **78** | Base Classes & State (Must inherit from here). |
+| **70-lib-debugden-net-blazor** | 70 | **78** | Base Classes & State (Must inherit from here). |
 | **70-lib-mudblazor** | 70 | **75** | Visual Rendering (Must use these tags). |
 | **30-env-dotnet-library** | 30 | **35** | Packaging rules. |
 
