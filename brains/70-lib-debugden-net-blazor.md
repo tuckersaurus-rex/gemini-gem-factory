@@ -1,4 +1,4 @@
-# 70 - LIB: DebugDen.Net.Blazor
+# 70 - LIB: DebugDen.NET.Blazor
 
 ## 1. COMPONENT ARCHITECTURE
 
@@ -25,7 +25,7 @@
 ### 4.1. Configuration & Dependency Injection
 
 ```csharp
-namespace DebugDen.Net.Blazor.Configuration
+namespace DebugDen.NET.Blazor.Configuration
 {
     public interface IDebugDenOptions
     {
@@ -56,7 +56,7 @@ namespace DebugDen.Net.Blazor.Configuration
     public class DebugDenOptions : IDebugDenOptions { /* ... */ }
 }
 
-namespace DebugDen.Net.Blazor.Utilities
+namespace DebugDen.NET.Blazor.Utilities
 {
     public static class DebugDenCoreExtensions
     {
@@ -71,7 +71,7 @@ namespace DebugDen.Net.Blazor.Utilities
 
         /* Registers the configuration using the "Shadow Options" pattern to merge custom settings. */
         public static IServiceCollection AddDebugDenConfiguration<TUserConfig>(this IServiceCollection services, IConfigurationSection section)
-            where TUserConfig : DebugDen.Net.Blazor.Configuration.DebugDenOptions;
+            where TUserConfig : DebugDen.NET.Blazor.Configuration.DebugDenOptions;
     }
 }
 ```
@@ -79,7 +79,7 @@ namespace DebugDen.Net.Blazor.Utilities
 ### 4.2. Core Models (Results & Tasks)
 
 ```csharp
-namespace DebugDen.Net.Blazor.Models
+namespace DebugDen.NET.Blazor.Models
 {
     /* Generic Result Pattern */
     public record DenResult<T> : DenResult
@@ -145,7 +145,7 @@ namespace DebugDen.Net.Blazor.Models
 ### 4.3. User Identity Models
 
 ```csharp
-namespace DebugDen.Net.Blazor.Models
+namespace DebugDen.NET.Blazor.Models
 {
     /* Core identity contract required by the User Session state. */
     public interface IDenUser<TKey> where TKey : notnull, IEquatable<TKey>
@@ -181,7 +181,7 @@ namespace DebugDen.Net.Blazor.Models
 ### 4.4. Services
 
 ```csharp
-namespace DebugDen.Net.Blazor.Services
+namespace DebugDen.NET.Blazor.Services
 {
     // Marker interface for all domain services.
     public interface IDenService {}
@@ -222,7 +222,7 @@ namespace DebugDen.Net.Blazor.Services
 ### 4.5. State Management (The Core)
 
 ```csharp
-namespace DebugDen.Net.Blazor.State
+namespace DebugDen.NET.Blazor.State
 {
     /* Represents the lifecycle status of a state container. */
     public enum DenStateStatus { Uninitialized, Loading, Ready, Busy, Error }
@@ -255,7 +255,7 @@ namespace DebugDen.Net.Blazor.State
 
     /* Base class for state containers implementing the "Tracked Task" pattern. */
     public abstract class DenStateBase<TTrackedTask> : IDenState, IDisposable, IAsyncDisposable
-        where TTrackedTask : DebugDen.Net.Blazor.Models.IDenTrackedTask, DebugDen.Net.Blazor.Models.IDenTrackedTaskBuilder<TTrackedTask>
+        where TTrackedTask : DebugDen.NET.Blazor.Models.IDenTrackedTask, DebugDen.NET.Blazor.Models.IDenTrackedTaskBuilder<TTrackedTask>
     {
         // Lifecycle Methods
         // OVERRIDE THIS for core data loading/fetching.
@@ -314,15 +314,15 @@ namespace DebugDen.Net.Blazor.State
     { /* ... */ }
 
     /* Contract for the User Session state container. */
-    public interface IDenUserSession<TKey> : IDenState, DebugDen.Net.Blazor.Models.IDenUser<TKey>
+    public interface IDenUserSession<TKey> : IDenState, DebugDen.NET.Blazor.Models.IDenUser<TKey>
         where TKey : notnull, IEquatable<TKey>
     { /* ... */ }
 
     /* Base class for User Session management. */
     public abstract class DenUserSessionBase<TKey, TUser, TTrackedTask> : DenStateBase<TTrackedTask>, IDenUserSession<TKey>
         where TKey : notnull, IEquatable<TKey>
-        where TUser : class, DebugDen.Net.Blazor.Models.IDenUser<TKey>, DebugDen.Net.Blazor.Models.IDenUserBuilder<TKey, TUser>
-        where TTrackedTask : DebugDen.Net.Blazor.Models.IDenTrackedTask, DebugDen.Net.Blazor.Models.IDenTrackedTaskBuilder<TTrackedTask>
+        where TUser : class, DebugDen.NET.Blazor.Models.IDenUser<TKey>, DebugDen.NET.Blazor.Models.IDenUserBuilder<TKey, TUser>
+        where TTrackedTask : DebugDen.NET.Blazor.Models.IDenTrackedTask, DebugDen.NET.Blazor.Models.IDenTrackedTaskBuilder<TTrackedTask>
     {
         // The current user state object.
         protected TUser CurrentUser { get; }
@@ -335,13 +335,13 @@ namespace DebugDen.Net.Blazor.State
 
         // Transactions (Login/Logout wrappers)
         // Executes a Login Transaction. Action returns the user on success, or null on failure.
-        protected Task<DebugDen.Net.Blazor.Models.DenResult> ExecuteLoginCommandAsync(Func<Task<TUser?>> action, string? attemptIdentifier = null);
+        protected Task<DebugDen.NET.Blazor.Models.DenResult> ExecuteLoginCommandAsync(Func<Task<TUser?>> action, string? attemptIdentifier = null);
         // Executes a Logout Transaction. Action performs the provider-specific logout logic.
-        protected Task<DebugDen.Net.Blazor.Models.DenResult> ExecuteLogoutCommandAsync(Func<Task> action);
+        protected Task<DebugDen.NET.Blazor.Models.DenResult> ExecuteLogoutCommandAsync(Func<Task> action);
         // Executes a Session Refresh Transaction. Action returns the refreshed user.
-        protected Task<DebugDen.Net.Blazor.Models.DenResult> ExecuteRefreshCommandAsync(Func<Task<TUser?>> action);
+        protected Task<DebugDen.NET.Blazor.Models.DenResult> ExecuteRefreshCommandAsync(Func<Task<TUser?>> action);
         // Executes an Update Transaction. Action returns the updated user.
-        protected Task<DebugDen.Net.Blazor.Models.DenResult> ExecuteUpdateCommandAsync(Func<Task<TUser?>> action);
+        protected Task<DebugDen.NET.Blazor.Models.DenResult> ExecuteUpdateCommandAsync(Func<Task<TUser?>> action);
     }
 }
 ```
@@ -349,7 +349,7 @@ namespace DebugDen.Net.Blazor.State
 ### 4.6. UI Templates (Blazor Components)
 
 ```csharp
-namespace DebugDen.Net.Blazor.Templates
+namespace DebugDen.NET.Blazor.Templates
 {
     /* The abstract base class for all UI components. */
     public abstract class DenComponentBase : ComponentBase, IDisposable, IAsyncDisposable
@@ -413,7 +413,7 @@ namespace DebugDen.Net.Blazor.Templates
 ### 4.7. Utilities (Logging)
 
 ```csharp
-namespace DebugDen.Net.Blazor.Utilities
+namespace DebugDen.NET.Blazor.Utilities
 {
     /* Source-generated logging extensions for high-performance structured logging. */
     public static class DenLoggerExtensions
