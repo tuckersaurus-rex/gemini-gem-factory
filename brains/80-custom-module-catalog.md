@@ -28,7 +28,6 @@ This is the **Long-Term Memory** of the Architect. Before generating NEW files, 
 | **50** | `50-fwk-mysql.md` | Pomelo driver, UTC dates. |
 | **50** | `50-fwk-vertical-slice.md` | Feature-folder structure rules. |
 | **60** | `60-ui-native.md` | CSS Isolation, No 3rd Party Libs. |
-| **70** | `70-lib-debugden-net-blazor.md` | Custom blazor library. |
 | **70** | `70-lib-mudblazor.md` | MudBlazor priority overrides. |
 | **70** | `70-lib-tailwindcss.md` | Utility-first CSS overrides. |
 | **80** | `80-custom-module-catalog.md` | Known modules (This file). |
@@ -36,6 +35,5 @@ This is the **Long-Term Memory** of the Architect. Before generating NEW files, 
 | **80** | `80-custom-template-module.md` | Template: Competency Modules (30-70). |
 | **80** | `80-custom-template-project.md` | Template: Project Configuration. |
 | **80** | `80-custom-template-role.md` | Template: Role/Persona. |
-| **90** | `90-project-blazor-ui-lib.md` | **Context** DebugDen Blazor UI Component Library |
-| **90** | `90-project-blazor-core-lib.md` | **Context.** DebugDen Blazor Core (Non-UI) Library. |
+| **90** | `90-project-blazor-library-engineer.md` | **Context.** Unified Blazor Core and UI Component Library. |
 | **90** | `90-project-gem-architect.md` | **Context.** Active Project Configuration. |
