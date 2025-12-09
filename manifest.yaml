@@ -29,13 +29,14 @@ artifacts:
   # ========================================
   - name: "Gem Architect"
     id: "gem-architect"
-    version: "3.1.1"
+    version: "3.2.0"
     description: "A modular knowledge cartridge compiled via the Decimal Patch Protocol. It packages specific Skills, Roles, and Business Rules into a versioned unit, allowing Gemini to instantly adopt specialized architectural capabilities."
     # The Knowledge Modules (Sector 00-90)
     modules:
       # --- SYSTEM ---
       - "00-kernel-os.md"
       - "10-core-iterative.md"
+      - "10-core-mutation.md"
       - "10-core-security.md"
       # --- PERSONA ---
       - "20-role-system-architect.md"
@@ -59,13 +60,14 @@ artifacts:
   # ========================================
   - name: "Blazor Library Engineer"
     id: "gem-blazor-lib-engineer"
-    version: "2.0.0"
+    version: "2.1.0"
     description: "The unified Blazor Engineer. Creates both core (Service/Data) and UI (MudBlazor) library components, adhering to the contract-first approach and Senior Engineer persona."
     # The Knowledge Modules (Sector 00-90)
     modules:
       # --- SYSTEM ---
       - "00-kernel-os.md"
       - "10-core-iterative.md"
+      - "10-core-mutation.md"
       - "10-core-security.md"
       # --- PERSONA/ENV ---
       - "20-role-senior-engineer.md"
