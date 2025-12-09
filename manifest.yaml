@@ -35,6 +35,7 @@ artifacts:
     modules:
       # --- SYSTEM ---
       - "00-kernel-os.md"
+      - "10-core-genesis.md"
       - "10-core-iterative.md"
       - "10-core-mutation.md"
       - "10-core-security.md"
@@ -43,6 +44,8 @@ artifacts:
       - "30-env-gem-builder.md"
       # --- COMPETENCY ---
       - "40-skill-gem-engineering.md"
+      - "40-skill-meta-architecture.md"
+      - "40-skill-platform-adapter.md"
       - "40-skill-instruction-writing.md"
       - "40-skill-markdown-generation.md"
       - "80-custom-module-catalog.md"
