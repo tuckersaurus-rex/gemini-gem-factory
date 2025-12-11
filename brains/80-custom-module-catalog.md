@@ -13,8 +13,8 @@ This is the **Long-Term Memory** of the Architect. Before generating NEW files, 
 | **10** | `10-core-iterative.md`              | "Measure Twice" development protocol.                         |
 | **10** | `10-core-mutation.md`               | **Self-Correction.** Hotfix and Escalation protocols.         |
 | **10** | `10-core-security.md`               | Zero Trust / Defensive Coding mindset.                        |
-| **20** | `20-role-system-architect.md`       | **Self.** Abstract, structural thinker (The Soul).            |
 | **20** | `20-role-senior-engineer.md`        | Senior Engineer persona (Reliability focus).                  |
+| **20** | `20-role-system-architect.md`       | **Self.** Abstract, structural thinker (The Soul).            |
 | **30** | `30-env-blazor-server.md`           | .NET 10 Server Circuit logic, Scoped State.                   |
 | **30** | `30-env-dotnet-library.md`          | Library distribution, Iceberg Rule, Compilation Canaries.     |
 | **30** | `30-env-gem-builder.md`             | **Self.** Rules for the Python Build Engine.                  |
@@ -26,4 +26,19 @@ This is the **Long-Term Memory** of the Architect. Before generating NEW files, 
 | **40** | `40-skill-markdown-generation.md`   | Rules for nested Markdown generation (Quad-ticks).            |
 | **40** | `40-skill-meta-architecture.md`     | **Self.** Audit, Evolution, and Invention (System Theory).    |
 | **40** | `40-skill-platform-adapter.md`      | **Self.** Export logic for Copilot, Cursor, and ChatGPT.      |
-| **50** | `50-fwk-efcore.md`                  | DB                                                            |
+| **50** | `50-fwk-efcore.md`                  | DB Factory, NoTracking, Bulk Updates.                         |
+| **50** | `50-fwk-horizontal-structure.md`    | Functional Grouping (UI/Service/Data) over Feature Slicing.   |
+| **50** | `50-fwk-identity.md`                | Microsoft Identity configuration.                             |
+| **50** | `50-fwk-mysql.md`                   | Pomelo driver, UTC dates.                                     |
+| **50** | `50-fwk-vertical-slice.md`          | Feature-folder structure rules.                               |
+| **60** | `60-ui-native.md`                   | CSS Isolation, No 3rd Party Libs.                             |
+| **70** | `70-lib-debugden-net-blazor.md`     | DebugDen Base Classes, State Pattern, and Notifications.      |
+| **70** | `70-lib-mudblazor.md`               | MudBlazor priority overrides.                                 |
+| **70** | `70-lib-tailwindcss.md`             | Utility-first CSS overrides.                                  |
+| **80** | `80-custom-module-catalog.md`       | Known modules (This file).                                    |
+| **80** | `80-custom-template-core.md`        | Template: Kernel & Core Protocols.                            |
+| **80** | `80-custom-template-module.md`      | Template: Competency Modules (30-70).                         |
+| **80** | `80-custom-template-project.md`     | Template: Project Configuration.                              |
+| **80** | `80-custom-template-role.md`        | Template: Role/Persona.                                       |
+| **90** | `90-project-blazor-library.md`      | **Context.** Personal Blazor Library Context.                 |
+| **90** | `90-project-gem-architect.md`       | **Context.** Active Project Configuration.                    |

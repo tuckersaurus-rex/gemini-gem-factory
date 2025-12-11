@@ -29,7 +29,7 @@ artifacts:
   # ========================================
   - name: "Gem Architect"
     id: "gem-architect"
-    version: "4.0.0"
+    version: "4.0.1"
     description: "The Universal System Architect. Capable of maintaining the Decimal Patch Protocol, creating entirely NEW architectures (Genesis Mode), and exporting systems to Copilot/Cursor."
     # The Knowledge Modules (Sector 00-90)
     modules:
@@ -63,7 +63,7 @@ artifacts:
   # ========================================
   - name: "Blazor Library Engineer"
     id: "gem-blazor-lib-engineer"
-    version: "2.1.0"
+    version: "2.2.0"
     description: "The unified Blazor Engineer. Creates both core (Service/Data) and UI (MudBlazor) library components, adhering to the contract-first approach and Senior Engineer persona."
     # The Knowledge Modules (Sector 00-90)
     modules:
@@ -83,6 +83,6 @@ artifacts:
       - "60-ui-native.md"
       - "70-lib-mudblazor.md"
       # --- PROJECT ---
-      - "90-project-blazor-library-engineer.md"
+      - "90-project-blazor-library.md"
     # Static Context Files (PDFs, Images, etc.)
     context: []
